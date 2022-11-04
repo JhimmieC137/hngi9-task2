@@ -14,9 +14,9 @@ To run the application, clone or download the repo, create a virtual environment
 
 Then run the following commands to run the application on your localhost
 
-`export FLASK_APP=app.py <br>
-export FLASK_DEBUG=true  <br>
-flask run`
+`export FLASK_APP=app.py` <br>
+`export FLASK_DEBUG=true`  <br>
+`flask run`
 
 The required json payload format is 
 
