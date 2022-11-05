@@ -1,24 +1,6 @@
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
-
-
-def addition(first, second):
-    result = first + second
-    return result
-
-def subtraction(first, second):
-    if first > second:
-        result = first - second
-    elif second > first:
-        result = second - first
-    else: 
-        result = 0
-    return result
-
-def multiplication(first, second):
-    result = first * second
-    return result
-
+from arithmetic import addition, subtraction, multiplication, str_math
 
 
 app = Flask(__name__)
@@ -35,14 +17,30 @@ def after_request(response):
         "Access-Control-Allow-Methods", "GET, POST"
     )
     return response
+  
     
     
+    
+@app.route('/')
+def home():
+    slack_username = "jimi"
+    age = 24
+    bio = "I am curious about how things work"
+    return jsonify ({
+        "slackUsername": slack_username,
+        "backend": True,
+        "age": age,
+        "bio": bio
+    })
 
 
 @app.route('/tasks/2', methods=['POST'])
 def enum_task():
     payload = request.get_json()
     try:
+        add = "add"
+        sub = "subtract"
+        mult = "multi"
         operation = payload.get('operation_type')
         X = payload.get('x')
         Y = payload.get('y')
@@ -52,8 +50,11 @@ def enum_task():
             final_result = addition(X, Y)
         elif operation == 'subtraction':
             final_result = subtraction(X, Y)
-        else:
+        elif operation == 'multiplication':
             final_result = multiplication(X, Y)
+        else:
+            final_result = str_math(operation)
+                      
             
         return jsonify ({
             'slackUsername': slack_user,
@@ -73,3 +74,8 @@ def bad_request(error):
         'error': 405,
         'message': 'Method not allowed'
     }), 405
+    
+    
+
+if __name__ == "__main__":
+    app.run()
